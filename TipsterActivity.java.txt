@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import java.text.NumberFormat;
 
+import com.example.android.a01022017tipster.NumberPickerLogic;
+
 public class TipsterActivity extends Activity {
 
     final static int DEFAULT_NUM_PEOPLE = 3;
@@ -124,24 +126,8 @@ public class TipsterActivity extends Activity {
 
                 // Enable/disable Other Percentage tip field
                 if (checkedId == R.id.radioYes) {
-        			/*
-        			 * Enable the calculate button if Total Amount and No. of
-        			 * People fields have valid values.
-
-                    btnCalculate.setEnabled(txtAmount.getText().length() > 0
-                            && txtPeople.getText().length() > 0);
-                     */
                 }
                 if (checkedId == R.id.radioNo) {
-        			/*
-        			 * Enable the calculate button if Total Amount and No. of
-        			 * People fields have valid values. Also ensure that user
-        			 * has entered a Other Tip Percentage value before enabling
-        			 * the Calculate button.
-
-                    btnCalculate.setEnabled(txtAmount.getText().length() > 0
-                            && txtPeople.getText().length() > 0);
-                      */
                 }
                 // To see whether the user entitle to discount
                 radioDiscountCheckedId = checkedId;
@@ -293,15 +279,15 @@ public class TipsterActivity extends Activity {
                 isError = true;
             }
         }
-
+        /*
+         * If user never changes radio selection, then it means
+         * the default selection of 0% is in effect.
+         */
         if (radioDiscountCheckedId == R.id.radioNo) {
             discount = 0.00;
         } else if (radioDiscountCheckedId == R.id.radioYes) {
             discount = 10.00;
         }
-        /*
-         * Check whether membership discount is applicable.
-         */
 
         /*
          * If all fields are populated with valid values, then proceed to
