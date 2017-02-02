@@ -1,0 +1,372 @@
+<html>
+<head>
+<title>TipsterActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(0,0,255); }
+.s3 { color: rgb(128,128,128); font-style: italic; }
+.s4 { color: rgb(0,128,0); font-weight: bold; }
+.s5 { color: rgb(128,128,128); font-weight: bold; font-style: italic; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+TipsterActivity.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">com.example.android.a01022017tipster; 
+ 
+</span><span class="s0">import </span><span class="s1">android.app.Activity; 
+</span><span class="s0">import </span><span class="s1">android.app.AlertDialog; 
+</span><span class="s0">import </span><span class="s1">android.content.DialogInterface; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.view.KeyEvent; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.view.View.OnClickListener; 
+</span><span class="s0">import </span><span class="s1">android.view.View.OnKeyListener; 
+</span><span class="s0">import </span><span class="s1">android.widget.Button; 
+</span><span class="s0">import </span><span class="s1">android.widget.EditText; 
+</span><span class="s0">import </span><span class="s1">android.widget.RadioGroup; 
+</span><span class="s0">import </span><span class="s1">android.widget.RadioGroup.OnCheckedChangeListener; 
+</span><span class="s0">import </span><span class="s1">android.widget.TextView; 
+ 
+</span><span class="s0">import </span><span class="s1">java.text.NumberFormat; 
+ 
+</span><span class="s0">public class </span><span class="s1">TipsterActivity </span><span class="s0">extends </span><span class="s1">Activity { 
+ 
+    </span><span class="s0">final static int </span><span class="s1">DEFAULT_NUM_PEOPLE = </span><span class="s2">3</span><span class="s1">; 
+ 
+    </span><span class="s0">final static </span><span class="s1">NumberFormat formatter = 
+            NumberFormat.getCurrencyInstance(); 
+ 
+    </span><span class="s3">// Widgets in the application</span><span class="s1"> 
+    </span><span class="s0">private </span><span class="s1">EditText txtAmount; 
+    </span><span class="s0">private </span><span class="s1">EditText txtPeople; 
+    </span><span class="s0">private </span><span class="s1">EditText txtTipOther; 
+    </span><span class="s0">private </span><span class="s1">RadioGroup rdoGroupTips; 
+    </span><span class="s0">private </span><span class="s1">RadioGroup rdoGroupDiscounts; 
+    </span><span class="s0">private </span><span class="s1">Button btnCalculate; 
+    </span><span class="s0">private </span><span class="s1">Button btnReset; 
+ 
+    </span><span class="s0">private </span><span class="s1">TextView txtDiscountAmount; 
+    </span><span class="s0">private </span><span class="s1">TextView txtTipAmount; 
+    </span><span class="s0">private </span><span class="s1">TextView txtTaxAmount; 
+    </span><span class="s0">private </span><span class="s1">TextView txtTotalToPay; 
+    </span><span class="s0">private </span><span class="s1">TextView txtTipPerPerson; 
+ 
+    </span><span class="s3">// For the id of radio button selected</span><span class="s1"> 
+    </span><span class="s0">private int </span><span class="s1">radioTipsCheckedId = -</span><span class="s2">1</span><span class="s1">; 
+    </span><span class="s0">private int </span><span class="s1">radioDiscountCheckedId = -</span><span class="s2">1</span><span class="s1">; 
+    </span><span class="s0">private </span><span class="s1">NumberPickerLogic mLogic; 
+ 
+    </span><span class="s3">/** Called when the activity is first created. */</span><span class="s1"> 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setContentView(R.layout.main); 
+ 
+        </span><span class="s3">// Access the various widgets by their id in R.java</span><span class="s1"> 
+        txtAmount = (EditText) findViewById(R.id.txtAmount); 
+        </span><span class="s3">//On app load, the cursor should be in the Amount field</span><span class="s1"> 
+        txtAmount.requestFocus(); 
+ 
+        txtPeople = (EditText) findViewById(R.id.txtPeople); 
+        txtPeople.setText(Integer.toString(DEFAULT_NUM_PEOPLE)); 
+ 
+        txtTipOther = (EditText) findViewById(R.id.txtTipOther); 
+ 
+        rdoGroupTips = (RadioGroup) findViewById(R.id.RadioGroupTips); 
+ 
+        rdoGroupDiscounts = (RadioGroup) findViewById(R.id.RadioGroupDiscounts); 
+ 
+        btnCalculate = (Button) findViewById(R.id.btnCalculate); 
+        </span><span class="s3">//On app load, the Calculate button is disabled</span><span class="s1"> 
+        btnCalculate.setEnabled(</span><span class="s0">false</span><span class="s1">); 
+ 
+        btnReset = (Button) findViewById(R.id.btnReset); 
+ 
+        txtDiscountAmount = (TextView) findViewById(R.id.txtDiscountAmount); 
+        txtTaxAmount = (TextView) findViewById(R.id.txtTaxAmount); 
+        txtTipAmount = (TextView) findViewById(R.id.txtTipAmount); 
+        txtTotalToPay = (TextView) findViewById(R.id.txtTotalToPay); 
+        txtTipPerPerson = (TextView) findViewById(R.id.txtTipPerPerson); 
+ 
+        </span><span class="s3">// On app load, disable the 'Other tip' percentage text field</span><span class="s1"> 
+        txtTipOther.setEnabled(</span><span class="s0">false</span><span class="s1">); 
+ 
+        </span><span class="s3">/* 
+         * Attach a OnCheckedChangeListener to the 
+         * radio group to monitor radio buttons selected by user 
+         */</span><span class="s1"> 
+        rdoGroupTips.setOnCheckedChangeListener(</span><span class="s0">new </span><span class="s1">OnCheckedChangeListener() { 
+ 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onCheckedChanged(RadioGroup group, </span><span class="s0">int </span><span class="s1">checkedId) { 
+                </span><span class="s3">// Enable/disable Other Percentage tip field</span><span class="s1"> 
+                </span><span class="s0">if </span><span class="s1">(checkedId == R.id.radioFifteen 
+                        || checkedId == R.id.radioTwenty) { 
+                    txtTipOther.setEnabled(</span><span class="s0">false</span><span class="s1">); 
+                    </span><span class="s3">/* 
+                     * Enable the calculate button if Total Amount and No. of 
+                     * People fields have valid values. 
+                     */</span><span class="s1"> 
+                    btnCalculate.setEnabled(txtAmount.getText().length() &gt; </span><span class="s2">0</span><span class="s1"> 
+                            &amp;&amp; txtPeople.getText().length() &gt; </span><span class="s2">0</span><span class="s1">); 
+                } 
+                </span><span class="s0">if </span><span class="s1">(checkedId == R.id.radioOther) { 
+                    </span><span class="s3">// enable the Other Percentage tip field</span><span class="s1"> 
+                    txtTipOther.setEnabled(</span><span class="s0">true</span><span class="s1">); 
+                    </span><span class="s3">// set the focus to this field</span><span class="s1"> 
+                    txtTipOther.requestFocus(); 
+                    </span><span class="s3">/* 
+                     * Enable the calculate button if Total Amount and No. of 
+                     * People fields have valid values. Also ensure that user 
+                     * has entered a Other Tip Percentage value before enabling 
+                     * the Calculate button. 
+                     */</span><span class="s1"> 
+                    btnCalculate.setEnabled(txtAmount.getText().length() &gt; </span><span class="s2">0</span><span class="s1"> 
+                            &amp;&amp; txtPeople.getText().length() &gt; </span><span class="s2">0</span><span class="s1"> 
+                            &amp;&amp; txtTipOther.getText().length() &gt; </span><span class="s2">0</span><span class="s1">); 
+                } 
+                </span><span class="s3">// To determine the tip percentage choice made by user</span><span class="s1"> 
+                radioTipsCheckedId = checkedId; 
+            } 
+        }); 
+ 
+        rdoGroupDiscounts.setOnCheckedChangeListener(</span><span class="s0">new </span><span class="s1">OnCheckedChangeListener() { 
+ 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onCheckedChanged(RadioGroup group, </span><span class="s0">int </span><span class="s1">checkedId) { 
+ 
+                </span><span class="s3">// Enable/disable Other Percentage tip field</span><span class="s1"> 
+                </span><span class="s0">if </span><span class="s1">(checkedId == R.id.radioYes) { 
+                    </span><span class="s3">/* 
+                     * Enable the calculate button if Total Amount and No. of 
+                     * People fields have valid values. 
+ 
+                    btnCalculate.setEnabled(txtAmount.getText().length() &gt; 0 
+                            &amp;&amp; txtPeople.getText().length() &gt; 0); 
+                     */</span><span class="s1"> 
+                } 
+                </span><span class="s0">if </span><span class="s1">(checkedId == R.id.radioNo) { 
+                    </span><span class="s3">/* 
+                     * Enable the calculate button if Total Amount and No. of 
+                     * People fields have valid values. Also ensure that user 
+                     * has entered a Other Tip Percentage value before enabling 
+                     * the Calculate button. 
+ 
+                    btnCalculate.setEnabled(txtAmount.getText().length() &gt; 0 
+                            &amp;&amp; txtPeople.getText().length() &gt; 0); 
+                      */</span><span class="s1"> 
+                } 
+                </span><span class="s3">// To see whether the user entitle to discount</span><span class="s1"> 
+                radioDiscountCheckedId = checkedId; 
+            } 
+        }); 
+ 
+ 
+ 
+ 
+         </span><span class="s3">/* 
+          * Attach a KeyListener to the Tip Amount, No. of People and Other Tip 
+          * Percentage text fields 
+          */</span><span class="s1"> 
+        txtAmount.setOnKeyListener(mKeyListener); 
+        txtTaxAmount.setOnKeyListener(mKeyListener); 
+        txtPeople.setOnKeyListener(mKeyListener); 
+        txtTipOther.setOnKeyListener(mKeyListener); 
+ 
+        btnCalculate.setOnClickListener(mClickListener); 
+        btnReset.setOnClickListener(mClickListener); 
+ 
+        </span><span class="s3">/** Create a NumberPickerLogic to handle the + and - keys */</span><span class="s1"> 
+        mLogic = </span><span class="s0">new </span><span class="s1">NumberPickerLogic(txtPeople, </span><span class="s2">1</span><span class="s1">, Integer.MAX_VALUE); 
+    } 
+ 
+    </span><span class="s3">/* 
+     * KeyListener for the Total Amount, No of People and Other Tip Percentage 
+     * fields. We need to apply this key listener to check for following 
+     * conditions: 
+     * 
+     * 1) If user selects Other tip percentage, then the other tip text field 
+     * should have a valid tip percentage entered by the user. Enable the 
+     * Calculate button only when user enters a valid value. 
+     * 
+     * 2) If user does not enter values in the Total Amount and No of People, 
+     * we cannot perform the calculations. Hence enable the Calculate button 
+     * only when user enters a valid values. 
+     */</span><span class="s1"> 
+    </span><span class="s0">private </span><span class="s1">OnKeyListener mKeyListener = </span><span class="s0">new </span><span class="s1">OnKeyListener() { 
+        @Override 
+        </span><span class="s0">public boolean </span><span class="s1">onKey(View v, </span><span class="s0">int </span><span class="s1">keyCode, KeyEvent event) { 
+ 
+            </span><span class="s0">switch </span><span class="s1">(v.getId()) { 
+                </span><span class="s0">case </span><span class="s1">R.id.txtAmount: 
+                </span><span class="s0">case </span><span class="s1">R.id.txtPeople: 
+                    btnCalculate.setEnabled(txtAmount.getText().length() &gt; </span><span class="s2">0</span><span class="s1"> 
+                            &amp;&amp; txtPeople.getText().length() &gt; </span><span class="s2">0</span><span class="s1">); 
+                    </span><span class="s0">break</span><span class="s1">; 
+                </span><span class="s0">case </span><span class="s1">R.id.txtTipOther: 
+                    btnCalculate.setEnabled(txtAmount.getText().length() &gt; </span><span class="s2">0</span><span class="s1"> 
+                            &amp;&amp; txtPeople.getText().length() &gt; </span><span class="s2">0</span><span class="s1"> 
+                            &amp;&amp; txtTipOther.getText().length() &gt; </span><span class="s2">0</span><span class="s1">); 
+                    </span><span class="s0">break</span><span class="s1">; 
+            } 
+            </span><span class="s0">return false</span><span class="s1">; 
+        } 
+ 
+    }; 
+ 
+    </span><span class="s3">/* 
+     * ClickListener for the Calculate and Reset buttons. 
+     * Depending on the button clicked, the corresponding 
+     * method is called. 
+     */</span><span class="s1"> 
+    </span><span class="s0">private </span><span class="s1">OnClickListener mClickListener = </span><span class="s0">new </span><span class="s1">OnClickListener() { 
+ 
+        @Override 
+        </span><span class="s0">public void </span><span class="s1">onClick(View v) { 
+            </span><span class="s0">if </span><span class="s1">(v.getId() == R.id.btnCalculate) { 
+                calculate(); 
+            } </span><span class="s0">else </span><span class="s1">{ 
+                reset(); 
+            } 
+        } 
+    }; 
+ 
+ 
+    </span><span class="s3">/* 
+     * Resets the results text views at the bottom of the screen as well as 
+     * resets the text fields and radio buttons. 
+     */</span><span class="s1"> 
+    </span><span class="s0">private void </span><span class="s1">reset() { 
+        txtDiscountAmount.setText(</span><span class="s4">&quot;&quot;</span><span class="s1">); 
+        txtTipAmount.setText(</span><span class="s4">&quot;&quot;</span><span class="s1">); 
+        txtTaxAmount.setText(</span><span class="s4">&quot;&quot;</span><span class="s1">); 
+        txtTotalToPay.setText(</span><span class="s4">&quot;&quot;</span><span class="s1">); 
+        txtTipPerPerson.setText(</span><span class="s4">&quot;&quot;</span><span class="s1">); 
+        txtAmount.setText(</span><span class="s4">&quot;&quot;</span><span class="s1">); 
+        txtPeople.setText(Integer.toString(DEFAULT_NUM_PEOPLE)); 
+        txtTipOther.setText(</span><span class="s4">&quot;&quot;</span><span class="s1">); 
+        rdoGroupTips.clearCheck(); 
+        rdoGroupTips.check(R.id.radioFifteen); 
+        rdoGroupDiscounts.clearCheck(); 
+        rdoGroupDiscounts.check(R.id.radioNo); 
+        </span><span class="s3">// set focus on the first field</span><span class="s1"> 
+        txtAmount.requestFocus(); 
+    } 
+ 
+    </span><span class="s0">public void </span><span class="s1">decrement(View v) { 
+        mLogic.decrement(); 
+    } 
+ 
+    </span><span class="s0">public void </span><span class="s1">increment(View v) { 
+        mLogic.increment(); 
+    } 
+ 
+    </span><span class="s3">/* 
+     * Calculate the tip as per data entered by the user. 
+     */</span><span class="s1"> 
+    </span><span class="s0">private void </span><span class="s1">calculate() { 
+        Double billAmount = Double.parseDouble( 
+                txtAmount.getText().toString()); 
+        Double totalPeople = Double.parseDouble( 
+                txtPeople.getText().toString()); 
+        Double percentage = </span><span class="s0">null</span><span class="s1">; 
+        Double discount = </span><span class="s0">null</span><span class="s1">; 
+ 
+       </span><span class="s0">boolean </span><span class="s1">isError = </span><span class="s0">false</span><span class="s1">; 
+        </span><span class="s0">if </span><span class="s1">(billAmount &lt; </span><span class="s2">1.0</span><span class="s1">) { 
+            showErrorAlert(</span><span class="s4">&quot;Enter a valid Total Amount.&quot;</span><span class="s1">, 
+                    txtAmount.getId()); 
+            isError = </span><span class="s0">true</span><span class="s1">; 
+        } 
+ 
+        </span><span class="s0">if </span><span class="s1">(totalPeople &lt; </span><span class="s2">1.0</span><span class="s1">) { 
+            showErrorAlert(</span><span class="s4">&quot;Enter a valid number of people.&quot;</span><span class="s1">, 
+                    txtPeople.getId()); 
+            isError = </span><span class="s0">true</span><span class="s1">; 
+        } 
+ 
+        </span><span class="s3">/* 
+         * If user never changes radio selection, then it means 
+         * the default selection of 15% is in effect. But it's 
+         * safer to verify... 
+         */</span><span class="s1"> 
+        </span><span class="s0">if </span><span class="s1">(radioTipsCheckedId == -</span><span class="s2">1</span><span class="s1">) { 
+            radioTipsCheckedId = rdoGroupTips.getCheckedRadioButtonId(); 
+        } 
+        </span><span class="s0">if </span><span class="s1">(radioTipsCheckedId == R.id.radioFifteen) { 
+            percentage = </span><span class="s2">15.00</span><span class="s1">; 
+        } </span><span class="s0">else if </span><span class="s1">(radioTipsCheckedId == R.id.radioTwenty) { 
+            percentage = </span><span class="s2">20.00</span><span class="s1">; 
+        } </span><span class="s0">else if </span><span class="s1">(radioTipsCheckedId == R.id.radioOther) { 
+            percentage = Double.parseDouble( 
+                    txtTipOther.getText().toString()); 
+            </span><span class="s0">if </span><span class="s1">(percentage &lt; </span><span class="s2">1.0</span><span class="s1">) { 
+                showErrorAlert(</span><span class="s4">&quot;Enter a valid Tip percentage&quot;</span><span class="s1">, 
+                        txtTipOther.getId()); 
+                isError = </span><span class="s0">true</span><span class="s1">; 
+            } 
+        } 
+ 
+        </span><span class="s0">if </span><span class="s1">(radioDiscountCheckedId == R.id.radioNo) { 
+            discount = </span><span class="s2">0.00</span><span class="s1">; 
+        } </span><span class="s0">else if </span><span class="s1">(radioDiscountCheckedId == R.id.radioYes) { 
+            discount = </span><span class="s2">10.00</span><span class="s1">; 
+        } 
+        </span><span class="s3">/* 
+         * Check whether membership discount is applicable. 
+         */</span><span class="s1"> 
+ 
+        </span><span class="s3">/* 
+         * If all fields are populated with valid values, then proceed to 
+         * calculate the tips 
+         */</span><span class="s1"> 
+        </span><span class="s0">if </span><span class="s1">(!isError) { 
+            </span><span class="s0">double </span><span class="s1">discountAmount = billAmount * discount / </span><span class="s2">100</span><span class="s1">; 
+            </span><span class="s0">double </span><span class="s1">taxAmount = (billAmount - discountAmount) * </span><span class="s2">0.15</span><span class="s1">; 
+            </span><span class="s0">double </span><span class="s1">tipAmount = (billAmount - discountAmount + taxAmount)* percentage / </span><span class="s2">100</span><span class="s1">; 
+            </span><span class="s0">double </span><span class="s1">totalToPay = billAmount - discountAmount + taxAmount + tipAmount; 
+            </span><span class="s0">double </span><span class="s1">perPersonPays = totalToPay / totalPeople; 
+ 
+            txtDiscountAmount.setText(formatter.format(discountAmount)); 
+            txtTaxAmount.setText(formatter.format(taxAmount)); 
+            txtTipAmount.setText(formatter.format(tipAmount)); 
+            txtTotalToPay.setText(formatter.format(totalToPay)); 
+            txtTipPerPerson.setText(formatter.format(perPersonPays)); 
+        } 
+    } 
+ 
+    </span><span class="s3">/** 
+     * Shows the error message in an alert dialog 
+     * 
+     * </span><span class="s5">@param </span><span class="s3">errorMessage 
+     *            String the error message to show 
+     * </span><span class="s5">@param </span><span class="s3">fieldId 
+     *            the Id of the field which caused the error. 
+     *            This is required so that the focus can be 
+     *            set on that field once the dialog is 
+     *            dismissed. 
+     */</span><span class="s1"> 
+    </span><span class="s0">private void </span><span class="s1">showErrorAlert(String errorMessage, </span><span class="s0">final int </span><span class="s1">fieldId) { 
+        </span><span class="s0">new </span><span class="s1">AlertDialog.Builder(</span><span class="s0">this</span><span class="s1">) 
+                .setTitle(</span><span class="s4">&quot;Error&quot;</span><span class="s1">) 
+                .setMessage(errorMessage) 
+                .setNeutralButton(</span><span class="s4">&quot;Close&quot;</span><span class="s1">, 
+                        </span><span class="s0">new </span><span class="s1">DialogInterface.OnClickListener() { 
+                            @Override 
+                            </span><span class="s0">public void </span><span class="s1">onClick(DialogInterface dialog, 
+                                                </span><span class="s0">int </span><span class="s1">which) { 
+                                findViewById(fieldId).requestFocus(); 
+                            } 
+                        }).show(); 
+    } 
+}</span></pre>
+</body>
+</html>
